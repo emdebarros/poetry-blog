@@ -4,131 +4,51 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>My Poetry Space</title>
-  <meta name="description" content="A simple, modern poetry blog." />
+  <meta name="description" content="A quiet personal space where poetry is therapy. While ‘My Infinite Adore’ holds these walls, I hope to speak to her here—to meet again." />
   <style>
     :root {
       --bg: #ffffff;
-      --fg: #0f172a; /* slate-900 */
-      --muted: #475569; /* slate-600 */
-      --card: #f8fafc; /* slate-50 */
-      --border: #e2e8f0; /* slate-200 */
-      --accent: #2563eb; /* blue-600 */
+      --fg: #0f172a;
+      --muted: #475569;
+      --card: #f8fafc;
+      --border: #e2e8f0;
+      --accent: #2563eb;
     }
     @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0b0f1a;
-        --fg: #e5e7eb;
-        --muted: #94a3b8;
-        --card: #0f172a;
-        --border: #1f2937;
-        --accent: #60a5fa;
-      }
+      :root { --bg:#0b0f1a; --fg:#e5e7eb; --muted:#94a3b8; --card:#0f172a; --border:#1f2937; --accent:#60a5fa; }
     }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      background: var(--bg);
-      color: var(--fg);
-      line-height: 1.6;
-    }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
-    /* Layout */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      backdrop-filter: saturate(180%) blur(8px);
-      background: color-mix(in oklab, var(--bg) 85%, transparent);
-      border-bottom: 1px solid var(--border);
-    }
-    .wrap { max-width: 1100px; margin: 0 auto; padding: 1rem; }
-    .brand { display: flex; align-items: baseline; gap: .75rem; }
-    .brand h1 { font-size: 1.25rem; letter-spacing: .02em; margin: 0; }
-    .brand small { color: var(--muted); }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 1.25rem;
-      align-items: start;
-      padding: 1.25rem;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
-
-    /* Sidebar */
-    .panel {
-      border: 1px solid var(--border);
-      background: var(--card);
-      border-radius: 1rem;
-      padding: .75rem;
-    }
-    .search {
-      display: flex;
-      gap: .5rem;
-      align-items: center;
-      padding: .5rem .75rem;
-      border: 1px solid var(--border);
-      border-radius: .75rem;
-      background: var(--bg);
-    }
-    .search input {
-      border: 0; outline: 0; background: transparent; color: var(--fg);
-      width: 100%;
-    }
-    .filters { display: flex; gap: .5rem; flex-wrap: wrap; margin: .75rem .25rem 0; }
-    .chip {
-      padding: .25rem .6rem; border: 1px solid var(--border); border-radius: 999px; font-size: .85rem; color: var(--muted);
-      cursor: pointer; user-select: none; white-space: nowrap;
-    }
-    .chip.active { background: var(--bg); color: var(--fg); border-color: var(--fg); }
-
-    .list { margin-top: .75rem; }
-    .item {
-      display: grid; grid-template-columns: 1fr auto; gap: .5rem; align-items: baseline;
-      padding: .75rem; border-radius: .75rem; cursor: pointer;
-    }
-    .item:hover { background: color-mix(in oklab, var(--bg) 90%, var(--card)); }
-    .item-title { font-weight: 600; }
-    .item-meta { color: var(--muted); font-size: .85rem; }
-
-    /* Poem */
-    article {
-      border: 1px solid var(--border);
-      background: var(--card);
-      border-radius: 1rem;
-      padding: 1.25rem;
-    }
-    .poem-title { font-size: clamp(1.3rem, 2.6vw, 2rem); margin: 0 0 .25rem 0; letter-spacing: .01em; }
-    .meta { color: var(--muted); font-size: .9rem; margin-bottom: 1rem; display:flex; gap:.5rem; flex-wrap: wrap; }
-    .tag { padding: .15rem .5rem; border: 1px solid var(--border); border-radius: 999px; font-size: .8rem; }
-
-    .poem {
-      font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-      white-space: pre-wrap; /* keep line breaks */
-      letter-spacing: .01em;
-      font-size: 1.06rem;
-    }
-
-    /* Footer */
-    footer { text-align: center; color: var(--muted); padding: 3rem 1rem; }
-    .footlinks { display:flex; justify-content:center; gap:1rem; }
-    .btn-copy {
-      border: 1px solid var(--border); background: var(--bg); color: var(--fg);
-      padding: .35rem .6rem; border-radius: .5rem; cursor: pointer; font-size: .85rem;
-    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";background:var(--bg);color:var(--fg);line-height:1.6}
+    a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+    header{position:sticky;top:0;z-index:10;backdrop-filter:saturate(180%) blur(8px);background:color-mix(in oklab,var(--bg) 85%, transparent);border-bottom:1px solid var(--border)}
+    .wrap{max-width:1100px;margin:0 auto;padding:1rem}
+    .brand{display:flex;align-items:baseline;gap:.75rem}
+    .brand h1{font-size:1.25rem;letter-spacing:.02em;margin:0}
+    .brand small{color:var(--muted)}
+    .grid{display:grid;grid-template-columns:320px 1fr;gap:1.25rem;align-items:start;padding:1.25rem;max-width:1100px;margin:0 auto}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--border);background:var(--card);border-radius:1rem;padding:.75rem}
+    .search{display:flex;gap:.5rem;align-items:center;padding:.5rem .75rem;border:1px solid var(--border);border-radius:.75rem;background:var(--bg)}
+    .search input{border:0;outline:0;background:transparent;color:var(--fg);width:100%}
+    .list{margin-top:.75rem}
+    .item{display:grid;grid-template-columns:1fr auto;gap:.5rem;align-items:baseline;padding:.75rem;border-radius:.75rem;cursor:pointer}
+    .item:hover{background:color-mix(in oklab,var(--bg) 90%, var(--card))}
+    .item-title{font-weight:600}
+    .item-meta{color:var(--muted);font-size:.85rem}
+    article{border:1px solid var(--border);background:var(--card);border-radius:1rem;padding:1.25rem}
+    .poem-title{font-size:clamp(1.3rem,2.6vw,2rem);margin:0 0 .25rem 0;letter-spacing:.01em}
+    .meta{color:var(--muted);font-size:.9rem;margin-bottom:1rem;display:flex;gap:.5rem;flex-wrap:wrap}
+    .poem{font-family:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;white-space:pre-wrap;letter-spacing:.01em;font-size:1.06rem}
+    footer{text-align:center;color:var(--muted);padding:3rem 1rem}
+    .btn-copy{border:1px solid var(--border);background:var(--bg);color:var(--fg);padding:.35rem .6rem;border-radius:.5rem;cursor:pointer;font-size:.85rem}
   </style>
 </head>
 <body>
   <header>
     <div class="wrap brand" role="banner">
       <h1>My Poetry Space</h1>
-      <small>inspired by my favourite poems</small>
+      <small>a quiet place to breathe</small>
       <span style="margin-left:auto"></span>
       <nav class="tabs" aria-label="Sections" style="display:flex;gap:.5rem;margin-right:.5rem">
         <a class="btn-copy" href="#/intro" title="Introduction">Intro</a>
@@ -143,9 +63,8 @@
     <aside class="panel" aria-label="Poem list and search">
       <div class="search" role="search">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.35-4.35m1.6-4.65a6.95 6.95 0 11-13.9 0 6.95 6.95 0 0113.9 0z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        <input id="q" type="search" placeholder="Search poems… (title, tags, text)" autocomplete="off" />
+        <input id="q" type="search" placeholder="Search… (title or text)" autocomplete="off" />
       </div>
-      <div class="filters" id="filters"></div>
       <div class="list" id="list" role="list"></div>
     </aside>
 
@@ -159,110 +78,39 @@
   </main>
 
   <footer>
-    <div class="footlinks">
-      <span>© <span id="year"></span> · Built with plain HTML/CSS/JS</span>
-      <span>·</span>
-      <a href="#" id="editHint" title="Open this file in your repo to edit">How to add poems</a>
-    </div>
+    <span>© <span id="year"></span> · Em De Barros — All poems are my original work. No reproduction without permission.</span>
   </footer>
 
   <script>
     // ——— CONTENT ————————————————————————————————————————————————
-    // Originals (your poems)
     const originals = [
       {
-        title: "First Light",
-        slug: "first-light",
+        title: "My Infinite Adore",
+        slug: "my-infinite-adore",
         date: "2025-11-03",
-        tags: ["morning", "quiet"],
-        text: `The kettle speaks before I do—
-small weather of steam
-fraying the window.
-
-I measure the day
-by how gently
-it opens.`
-      },
-      {
-        title: "Pocket River",
-        slug: "pocket-river",
-        date: "2025-10-12",
-        tags: ["city", "motion"],
-        text: `In my coat—
-a ticket stub, two crumbs,
-a river trying
-not to be noticed.`
+        text: `My Infinite Adore\nI lay each stone in silence,\na dwelling untouched\nFor when your heart remembers,\nour unwritten pages\nThe walls will wake\nto whisper the version of us\ntime was too young to hold`
       }
     ];
 
-    // Analyses (blog-style reflections on other poems)
-    const analyses = [
-      {
-        title: "Learning to Breathe with a Line Break",
-        slug: "breathe-with-a-line-break",
-        date: "2025-10-15",
-        tags: ["craft", "line-breaks"],
-        text: `Notes on how a short line can widen the lungs of a poem.
+    const analyses = [];
 
-I look at a favorite stanza and mark where the silence does the talking.`
-      }
-    ];
-
-    // Intro text (editable)
     const intro = {
       title: "Why I'm Here",
-      text: `I'm making this space to express myself as I've fallen in love with poetry.
-
-It's a form of therapy. It gives me breath while taking my breath away.
-It's where my love lives. It's where I can be understood. It's where I grow.`
+      text: `This is my space to express myself as I’ve fallen in love with poetry.\n\nIt’s a form of therapy. It gives me breath while taking my breath away.\nIt’s where my love lives. It’s where I can be understood. It’s where I grow.\n\nWhile “My Infinite Adore” holds these walls, it’s a space I hope I can talk to her through—to meet again.`
     };
 
-    // ——— UTIL & STATE ——————————————————————————————————————————————
+    // ——— STATE & HELPERS ————————————————————————————————————————
     const $ = (sel) => document.querySelector(sel);
     const listEl = $('#list');
-    const filtersEl = $('#filters');
     const qEl = $('#q');
+    const state = { q: '', mode: 'intro' }; // 'intro' | 'analyses' | 'originals'
 
-    const state = { q: '', tag: null, mode: 'intro' }; // 'intro' | 'analyses' | 'originals'
-
-    function slugify(s){
-      return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
-    }
-
-    function dataForMode(){
-      return state.mode==='analyses' ? analyses : originals;
-    }
-
-    function uniqueTags(){
-      const set = new Set();
-      dataForMode().forEach(p => (p.tags||[]).forEach(t=>set.add(t)));
-      return Array.from(set).sort();
-    }
-
-    function renderFilters(){
-      if (state.mode==='intro'){ filtersEl.innerHTML=''; return; }
-      const tags = uniqueTags();
-      filtersEl.innerHTML = '';
-      const all = document.createElement('div');
-      all.className = 'chip' + (state.tag===null ? ' active' : '');
-      all.textContent = 'All';
-      all.onclick = ()=>{ state.tag=null; renderList(); };
-      filtersEl.appendChild(all);
-      tags.forEach(tag => {
-        const el = document.createElement('div');
-        el.className = 'chip' + (state.tag===tag ? ' active' : '');
-        el.textContent = tag;
-        el.onclick = ()=>{ state.tag = (state.tag===tag? null : tag); renderFilters(); renderList(); };
-        filtersEl.appendChild(el);
-      });
-    }
+    function dataForMode(){ return state.mode==='analyses' ? analyses : originals; }
 
     function matches(p){
       const q = state.q.trim().toLowerCase();
-      const hay = [p.title, (p.tags||[]).join(' '), p.text].join(' ').toLowerCase();
-      const passQ = !q || hay.includes(q);
-      const passTag = !state.tag || (p.tags||[]).includes(state.tag);
-      return passQ && passTag;
+      const hay = [p.title, p.text].join(' ').toLowerCase();
+      return !q || hay.includes(q);
     }
 
     function renderList(){
@@ -280,7 +128,7 @@ It's where my love lives. It's where I can be understood. It's where I grow.`
         el.innerHTML = `
           <div>
             <div class="item-title">${p.title}</div>
-            <div class="item-meta">${p.date}${p.tags?.length? ' · ' + p.tags.join(', ') : ''}</div>
+            <div class="item-meta">${p.date ?? ''}</div>
           </div>
           <div>→</div>`;
         const base = state.mode==='analyses'? '#/analyses/' : '#/originals/';
@@ -289,10 +137,9 @@ It's where my love lives. It's where I can be understood. It's where I grow.`
       }
     }
 
-    function renderPoemLike(p){
+    function renderEntry(p){
       $('#title').textContent = p.title;
-      const tags = (p.tags||[]).map(t=>`<span class="tag">${t}</span>`).join(' ');
-      $('#meta').innerHTML = `<span>${p.date ?? ''}</span>${tags? ' · ' + tags : ''}`;
+      $('#meta').innerHTML = `<span>${p.date ?? ''}</span>`;
       $('#poem').textContent = p.text;
       document.title = `${p.title} — My Poetry Space`;
     }
@@ -311,62 +158,32 @@ It's where my love lives. It's where I can be understood. It's where I grow.`
       document.title = `My Poetry Space`;
     }
 
-    function navigate(hash){
-      if (location.hash !== hash) location.hash = hash;
-      route();
-    }
+    function navigate(hash){ if (location.hash !== hash) location.hash = hash; route(); }
 
     function route(){
       const h = location.hash || '#/intro';
-      // Match sections
-      if (h === '#/intro'){ state.mode='intro'; state.tag=null; renderFilters(); renderList(); renderIntro(); return; }
-      if (h === '#/analyses'){ state.mode='analyses'; state.tag=null; renderFilters(); renderList(); // default to newest
-        const newest = analyses.slice().sort((a,b)=> (a.date<b.date?1:-1))[0];
-        if (newest) renderPoemLike(newest); return; }
-      if (h === '#/originals'){ state.mode='originals'; state.tag=null; renderFilters(); renderList();
-        const newest = originals.slice().sort((a,b)=> (a.date<b.date?1:-1))[0];
-        if (newest) renderPoemLike(newest); return; }
-
-      // Match detail pages
-      let m = /^#\/analyses\/(.+)$/.exec(h);
-      if (m){ state.mode='analyses'; renderFilters(); renderList(); const p = analyses.find(x=>x.slug===m[1]); if (p) return renderPoemLike(p); return notFound(); }
-      m = /^#\/originals\/(.+)$/.exec(h);
-      if (m){ state.mode='originals'; renderFilters(); renderList(); const p = originals.find(x=>x.slug===m[1]); if (p) return renderPoemLike(p); return notFound(); }
-
-      // Fallback
+      if (h === '#/intro'){ state.mode='intro'; renderList(); renderIntro(); return; }
+      if (h === '#/analyses'){ state.mode='analyses'; renderList(); const newest = analyses[0]; if (newest) renderEntry(newest); else { $('#title').textContent='Analyses'; $('#meta').innerHTML=''; $('#poem').textContent='Start an analysis by editing the code and adding to the analyses array.'; } return; }
+      if (h === '#/originals'){ state.mode='originals'; renderList(); const newest = originals[0]; if (newest) renderEntry(newest); return; }
+      let m = /^#\/analyses\/(.+)$/.exec(h); if (m){ state.mode='analyses'; renderList(); const p = analyses.find(x=>x.slug===m[1]); if (p) return renderEntry(p); return notFound(); }
+      m = /^#\/originals\/(.+)$/.exec(h); if (m){ state.mode='originals'; renderList(); const p = originals.find(x=>x.slug===m[1]); if (p) return renderEntry(p); return notFound(); }
       notFound();
     }
 
-    // Search
     qEl.addEventListener('input', (e)=>{ state.q = e.target.value; renderList(); });
 
-    // Copy link to current page
     $('#feedLink').addEventListener('click', (e)=>{
       e.preventDefault();
       const url = location.href;
       navigator.clipboard.writeText(url).then(()=>{
-        const a = e.currentTarget; const old = a.textContent; a.textContent = 'Link copied!';
-        setTimeout(()=>a.textContent=old, 1200);
+        const a = e.currentTarget; const old = a.textContent; a.textContent = 'Link copied!'; setTimeout(()=>a.textContent=old, 1200);
       });
     });
 
-    // Init
-    renderFilters();
     renderList();
     route();
     window.addEventListener('hashchange', route);
     $('#year').textContent = new Date().getFullYear();
-
-    // Help link
-    $('#editHint').addEventListener('click', (e)=>{
-      e.preventDefault();
-      alert(`Add posts by editing index.html:
-
-• Originals: add to the \"originals\" array.
-• Analyses: add to the \"analyses\" array.
-• Use unique slugs and YYYY-MM-DD dates.
-• Share any page using the copy-link button.`);
-    });
   </script>
 </body>
 </html>
