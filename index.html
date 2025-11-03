@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Poems — by Me</title>
+  <title>My Poetry Space</title>
   <meta name="description" content="A simple, modern poetry blog." />
   <style>
     :root {
@@ -127,9 +127,14 @@
 <body>
   <header>
     <div class="wrap brand" role="banner">
-      <h1>Poems</h1>
-      <small>simple & modern</small>
+      <h1>My Poetry Space</h1>
+      <small>quiet, modern, mine</small>
       <span style="margin-left:auto"></span>
+      <nav class="tabs" aria-label="Sections" style="display:flex;gap:.5rem;margin-right:.5rem">
+        <a class="btn-copy" href="#/intro" title="Introduction">Intro</a>
+        <a class="btn-copy" href="#/analyses" title="Poem analyses">Analyses</a>
+        <a class="btn-copy" href="#/originals" title="My originals">Originals</a>
+      </nav>
       <a id="feedLink" href="#" aria-label="Copy share link" class="btn-copy" title="Copy share link">Copy link</a>
     </div>
   </header>
@@ -148,7 +153,7 @@
       <article aria-live="polite" aria-busy="false">
         <h2 class="poem-title" id="title">Welcome</h2>
         <div class="meta" id="meta"></div>
-        <div class="poem" id="poem">Welcome to your little poetry garden. 🌿\n\nThis site is one file you can drop on GitHub Pages.\nAdd your own poems below in the <code>poems</code> array, commit, and you’re live.</div>
+        <div class="poem" id="poem"></div>
       </article>
     </section>
   </main>
@@ -162,52 +167,80 @@
   </footer>
 
   <script>
-    // ——— EDIT HERE: Your poems ————————————————————————————————————————
-    // Add poems as objects to this array. Keep the slug unique. Dates are YYYY-MM-DD.
-    // You can also export these to a separate JSON later if you want.
-    const poems = [
+    // ——— CONTENT ————————————————————————————————————————————————
+    // Originals (your poems)
+    const originals = [
       {
         title: "First Light",
         slug: "first-light",
         date: "2025-11-03",
         tags: ["morning", "quiet"],
-        text: `The kettle speaks before I do—\nsmall weather of steam\nfraying the window.\n\nI measure the day\nby how gently\nit opens.`
+        text: `The kettle speaks before I do—
+small weather of steam
+fraying the window.
+
+I measure the day
+by how gently
+it opens.`
       },
       {
         title: "Pocket River",
         slug: "pocket-river",
         date: "2025-10-12",
         tags: ["city", "motion"],
-        text: `In my coat—\na ticket stub, two crumbs,\na river trying\nnot to be noticed.`
-      },
-      {
-        title: "Instructions for a Plant",
-        slug: "instructions-plant",
-        date: "2025-09-28",
-        tags: ["home", "tender"],
-        text: `Name the light.\nTurn the pot when you turn the page.\nForgive the thirst\nyou learned from weather.`
+        text: `In my coat—
+a ticket stub, two crumbs,
+a river trying
+not to be noticed.`
       }
     ];
 
-    // ——— Minimal client-side router & renderer ————————————————
+    // Analyses (blog-style reflections on other poems)
+    const analyses = [
+      {
+        title: "Learning to Breathe with a Line Break",
+        slug: "breathe-with-a-line-break",
+        date: "2025-10-15",
+        tags: ["craft", "line-breaks"],
+        text: `Notes on how a short line can widen the lungs of a poem.
+
+I look at a favorite stanza and mark where the silence does the talking.`
+      }
+    ];
+
+    // Intro text (editable)
+    const intro = {
+      title: "Why I'm Here",
+      text: `I'm making this space to express myself as I've fallen in love with poetry.
+
+It's a form of therapy. It gives me breath while taking my breath away.
+It's where my love lives. It's where I can be understood. It's where I grow.`
+    };
+
+    // ——— UTIL & STATE ——————————————————————————————————————————————
     const $ = (sel) => document.querySelector(sel);
     const listEl = $('#list');
     const filtersEl = $('#filters');
     const qEl = $('#q');
 
-    const state = { q: '', tag: null };
+    const state = { q: '', tag: null, mode: 'intro' }; // 'intro' | 'analyses' | 'originals'
 
     function slugify(s){
       return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
     }
 
+    function dataForMode(){
+      return state.mode==='analyses' ? analyses : originals;
+    }
+
     function uniqueTags(){
       const set = new Set();
-      poems.forEach(p => (p.tags||[]).forEach(t=>set.add(t)));
+      dataForMode().forEach(p => (p.tags||[]).forEach(t=>set.add(t)));
       return Array.from(set).sort();
     }
 
     function renderFilters(){
+      if (state.mode==='intro'){ filtersEl.innerHTML=''; return; }
       const tags = uniqueTags();
       filtersEl.innerHTML = '';
       const all = document.createElement('div');
@@ -233,13 +266,11 @@
     }
 
     function renderList(){
-      const items = poems
-        .slice()
-        .sort((a,b)=> (a.date<b.date?1:-1))
-        .filter(matches);
+      if (state.mode==='intro'){ listEl.innerHTML=''; return; }
+      const items = dataForMode().slice().sort((a,b)=> (a.date<b.date?1:-1)).filter(matches);
       listEl.innerHTML = '';
       if (items.length===0){
-        listEl.innerHTML = `<div class="item"><div class="item-title">No poems</div><div class="item-meta"></div></div>`;
+        listEl.innerHTML = `<div class="item"><div class="item-title">No posts</div><div class="item-meta"></div></div>`;
         return;
       }
       for (const p of items){
@@ -252,24 +283,32 @@
             <div class="item-meta">${p.date}${p.tags?.length? ' · ' + p.tags.join(', ') : ''}</div>
           </div>
           <div>→</div>`;
-        el.onclick = ()=>navigate(`#/${p.slug}`);
+        const base = state.mode==='analyses'? '#/analyses/' : '#/originals/';
+        el.onclick = ()=>navigate(`${base}${p.slug}`);
         listEl.appendChild(el);
       }
     }
 
-    function renderPoem(p){
+    function renderPoemLike(p){
       $('#title').textContent = p.title;
       const tags = (p.tags||[]).map(t=>`<span class="tag">${t}</span>`).join(' ');
-      $('#meta').innerHTML = `<span>${p.date}</span>${tags? ' · ' + tags : ''}`;
-      $('#poem').textContent = p.text; // preserve line breaks via CSS
-      document.title = `${p.title} — Poems`;
+      $('#meta').innerHTML = `<span>${p.date ?? ''}</span>${tags? ' · ' + tags : ''}`;
+      $('#poem').textContent = p.text;
+      document.title = `${p.title} — My Poetry Space`;
+    }
+
+    function renderIntro(){
+      $('#title').textContent = intro.title;
+      $('#meta').innerHTML = '';
+      $('#poem').textContent = intro.text;
+      document.title = `My Poetry Space — Intro`;
     }
 
     function notFound(){
       $('#title').textContent = 'Not found';
       $('#meta').innerHTML = '';
-      $('#poem').textContent = 'This poem does not exist yet.';
-      document.title = `Poems`;
+      $('#poem').textContent = 'This page does not exist yet.';
+      document.title = `My Poetry Space`;
     }
 
     function navigate(hash){
@@ -278,23 +317,30 @@
     }
 
     function route(){
-      const h = location.hash;
-      const match = /^#\/(.+)$/.exec(h);
-      if (!match){
-        // Default to newest poem
-        const newest = poems.slice().sort((a,b)=> (a.date<b.date?1:-1))[0];
-        if (newest) { renderPoem(newest); }
-        return;
-      }
-      const slug = match[1];
-      const p = poems.find(x => x.slug===slug);
-      if (p) renderPoem(p); else notFound();
+      const h = location.hash || '#/intro';
+      // Match sections
+      if (h === '#/intro'){ state.mode='intro'; state.tag=null; renderFilters(); renderList(); renderIntro(); return; }
+      if (h === '#/analyses'){ state.mode='analyses'; state.tag=null; renderFilters(); renderList(); // default to newest
+        const newest = analyses.slice().sort((a,b)=> (a.date<b.date?1:-1))[0];
+        if (newest) renderPoemLike(newest); return; }
+      if (h === '#/originals'){ state.mode='originals'; state.tag=null; renderFilters(); renderList();
+        const newest = originals.slice().sort((a,b)=> (a.date<b.date?1:-1))[0];
+        if (newest) renderPoemLike(newest); return; }
+
+      // Match detail pages
+      let m = /^#\/analyses\/(.+)$/.exec(h);
+      if (m){ state.mode='analyses'; renderFilters(); renderList(); const p = analyses.find(x=>x.slug===m[1]); if (p) return renderPoemLike(p); return notFound(); }
+      m = /^#\/originals\/(.+)$/.exec(h);
+      if (m){ state.mode='originals'; renderFilters(); renderList(); const p = originals.find(x=>x.slug===m[1]); if (p) return renderPoemLike(p); return notFound(); }
+
+      // Fallback
+      notFound();
     }
 
     // Search
     qEl.addEventListener('input', (e)=>{ state.q = e.target.value; renderList(); });
 
-    // Copy link to current poem
+    // Copy link to current page
     $('#feedLink').addEventListener('click', (e)=>{
       e.preventDefault();
       const url = location.href;
@@ -311,10 +357,15 @@
     window.addEventListener('hashchange', route);
     $('#year').textContent = new Date().getFullYear();
 
-    // Tiny helper: show instructions on click
+    // Help link
     $('#editHint').addEventListener('click', (e)=>{
       e.preventDefault();
-      alert(`How to add poems:\n\n1) Open this file (index.html) in your repo.\n2) Find the \"poems\" array near the bottom of the file.\n3) Duplicate one of the objects and change title, slug, date, tags, text.\n4) Commit the file — you\'re live.\n\nTips:\n• Keep slugs short, lowercase, and unique.\n• Dates use YYYY-MM-DD.\n• Line breaks in \"text\" are kept as written.`);
+      alert(`Add posts by editing index.html:
+
+• Originals: add to the \"originals\" array.
+• Analyses: add to the \"analyses\" array.
+• Use unique slugs and YYYY-MM-DD dates.
+• Share any page using the copy-link button.`);
     });
   </script>
 </body>
