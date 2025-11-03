@@ -208,7 +208,7 @@
     function route(){
       const h = location.hash || '#/intro';
       if (h === '#/intro'){ state.mode='intro'; renderList(); renderIntro(); return; }
-      if (h === '#/analyses'){ state.mode='analyses'; renderList(); const newest = analyses[0]; if (newest) renderEntry(newest); else { $('#title').textContent='Analyses'; $('#meta').innerHTML=''; $('#poem').textContent='Start an analysis by editing the code and adding to the analyses array.'; } return; }
+      if (h === '#/analyses'){ state.mode='analyses'; renderList(); const newest = analyses[0]; if (newest) renderEntry(newest); else { $('#title').textContent='Analyses'; $('#meta').innerHTML=''; $('#poem').textContent='No analyses yet.'; } return; }
       if (h === '#/originals'){ state.mode='originals'; renderList(); const newest = originals[0]; if (newest) renderEntry(newest); return; }
       let m = /^#\/analyses\/(.+)$/.exec(h); if (m){ state.mode='analyses'; renderList(); const p = analyses.find(x=>x.slug===m[1]); if (p) return renderEntry(p); return notFound(); }
       m = /^#\/originals\/(.+)$/.exec(h); if (m){ state.mode='originals'; renderList(); const p = originals.find(x=>x.slug===m[1]); if (p) return renderEntry(p); return notFound(); }
