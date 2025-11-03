@@ -127,14 +127,40 @@
       return !q || hay.includes(q);
     }
 
+    // ——— UPDATED renderList ——————————————————————————————————————————
     function renderList(){
-      if (state.mode==='intro'){ listEl.innerHTML=''; return; }
-      const items = dataForMode().slice().sort((a,b)=> (a.date<b.date?1:-1)).filter(matches);
+      let items;
+
+      if (state.mode === 'intro') {
+        // Combine all posts for Intro search
+        items = [
+          ...analyses.map(p => ({ ...p, __mode: 'analyses' })),
+          ...originals.map(p => ({ ...p, __mode: 'originals' }))
+        ]
+        .filter(matches)
+        .sort((a, b) => {
+          const da = a.date || '';
+          const db = b.date || '';
+          return db.localeCompare(da); // newest first
+        });
+      } else {
+        // Normal per-section list
+        items = dataForMode()
+          .slice()
+          .filter(matches)
+          .sort((a, b) => {
+            const da = a.date || '';
+            const db = b.date || '';
+            return db.localeCompare(da);
+          });
+      }
+
       listEl.innerHTML = '';
-      if (items.length===0){
+      if (items.length === 0){
         listEl.innerHTML = `<div class="item"><div class="item-title">No posts</div><div class="item-meta"></div></div>`;
         return;
       }
+
       for (const p of items){
         const el = document.createElement('div');
         el.className = 'item';
@@ -144,9 +170,14 @@
             <div class="item-title">${p.title}</div>
             <div class="item-meta">${p.date ?? ''}</div>
           </div>
-          <div>→</div>`;
-        const base = state.mode==='analyses'? '#/analyses/' : '#/originals/';
-        el.onclick = ()=>navigate(`${base}${p.slug}`);
+          <div>→</div>
+        `;
+
+        const base = p.__mode
+          ? `#/${p.__mode}/`
+          : (state.mode === 'analyses' ? '#/analyses/' : '#/originals/');
+
+        el.onclick = () => navigate(`${base}${p.slug}`);
         listEl.appendChild(el);
       }
     }
@@ -185,8 +216,6 @@
     }
 
     qEl.addEventListener('input', (e)=>{ state.q = e.target.value; renderList(); });
-
-    // Removed copy-link button and its JS listener
 
     renderList();
     route();
