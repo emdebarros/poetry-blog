@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My Poetry Space</title>
+  <title>My Infinite Adore — Poetry Space</title>
   <meta
-  name="description"
-  content="A personal poetry blog where I share my original poems, reflections, and favourite poems that help me breathe, understand, and grow."
+    name="description"
+    content="My Infinite Adore is my personal poetry space where I share my original poems, reflections, and favourite poems that help me breathe, understand, and grow."
   />
   <style>
     :root {
@@ -102,6 +102,21 @@
       border-radius: 0.5rem;
       font-size: 0.9rem;
       white-space: nowrap;
+      transition: background 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out;
+    }
+
+    nav.tabs a:hover {
+      background: color-mix(in oklab, var(--bg) 92%, var(--card));
+    }
+
+    nav.tabs a.active {
+      border-color: color-mix(in oklab, var(--accent) 70%, var(--border));
+      background: color-mix(in oklab, var(--accent) 12%, var(--bg));
+      color: var(--fg);
+    }
+
+    nav.tabs a[aria-current="page"] {
+      cursor: default;
     }
 
     .grid {
@@ -335,9 +350,9 @@
       <small>my poetry space</small>
       <span style="margin-left: auto"></span>
       <nav class="tabs" aria-label="Sections">
-        <a href="#/intro" title="Introduction">Intro</a>
-        <a href="#/analyses" title="Poem analyses">Analyses</a>
-        <a href="#/originals" title="My originals">Originals</a>
+        <a href="#/intro" data-mode="intro" title="Introduction">Intro</a>
+        <a href="#/analyses" data-mode="analyses" title="Poem analyses">Analyses</a>
+        <a href="#/originals" data-mode="originals" title="My originals">Originals</a>
       </nav>
     </div>
   </header>
