@@ -2,11 +2,11 @@
   "use strict";
 
   /**
-   * Simple single-page app controller for the poetry space.
+   * Single-page app controller for the poetry space.
    * - Loads content from poems.json
    * - Handles hash-based routing
-   * - Provides search across titles and text
-   * - Hides side panel on intro page and shows a styled quote
+   * - Provides search for non-intro sections
+   * - Shows a quote in the sidebar on the intro page
    */
 
   const state = {
@@ -21,7 +21,8 @@
     title: null,
     meta: null,
     poem: null,
-    year: null
+    year: null,
+    introQuote: null
   };
 
   // —— DOM helpers ———————————————————————————
@@ -33,6 +34,7 @@
     els.meta = document.querySelector("#meta");
     els.poem = document.querySelector("#poem");
     els.year = document.querySelector("#year");
+    els.introQuote = document.querySelector("#intro-quote-slot");
   }
 
   function setYear() {
@@ -125,10 +127,8 @@
     els.title.textContent = intro.title || "Intro";
     els.meta.innerHTML = "";
 
-    const quote = escapeHtml(intro.quote || "");
-    const author = escapeHtml(intro.quoteAuthor || "");
+    // Main body text (original “why I’m here” content, without the quote)
     const body = intro.body || "";
-
     const bodyParagraphs = body
       .split(/\n{2,}/)
       .map((p) => p.trim())
@@ -137,14 +137,29 @@
       .join("");
 
     els.poem.innerHTML = `
-      <section class="intro-quote-card">
-        <div class="intro-quote-text">${quote}</div>
-        <div class="intro-quote-author">— ${author}</div>
-      </section>
       <section class="intro-body">
         ${bodyParagraphs}
       </section>
     `;
+
+    // Sidebar quote
+    if (els.introQuote) {
+      const quote = intro.quote ? escapeHtml(intro.quote) : "";
+      const author = intro.quoteAuthor ? escapeHtml(intro.quoteAuthor) : "";
+
+      if (quote) {
+        els.introQuote.innerHTML = `
+          <div class="intro-quote-card">
+            <div class="intro-quote-text">${quote}</div>
+            <div class="intro-quote-author">— ${author}</div>
+          </div>
+        `;
+        els.introQuote.hidden = false;
+      } else {
+        els.introQuote.innerHTML = "";
+        els.introQuote.hidden = true;
+      }
+    }
 
     document.title = "My Poetry Space — Intro";
   }
@@ -156,6 +171,11 @@
     els.meta.innerHTML = poem.date ? `<span>${poem.date}</span>` : "";
     els.poem.textContent = poem.text || "";
     document.title = `${poem.title} — My Poetry Space`;
+
+    // Hide quote when not on intro
+    if (els.introQuote) {
+      els.introQuote.hidden = true;
+    }
   }
 
   function navigate(hash) {
@@ -194,7 +214,8 @@
     let items;
 
     if (state.mode === "intro") {
-      // In intro mode, search across all posts (for now still available when not hidden)
+      // Intro: we still allow search internally if user types,
+      // but sidebar is visually replaced by the quote.
       const analyses = state.data.analyses.map((p) => ({
         ...p,
         __mode: "analyses"
