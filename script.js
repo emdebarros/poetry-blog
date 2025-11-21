@@ -22,7 +22,8 @@
     meta: null,
     poem: null,
     year: null,
-    introQuote: null
+    introQuote: null,
+    tabs: []
   };
 
   // —— DOM helpers ———————————————————————————
@@ -35,6 +36,7 @@
     els.poem = document.querySelector("#poem");
     els.year = document.querySelector("#year");
     els.introQuote = document.querySelector("#intro-quote-slot");
+    els.tabs = Array.from(document.querySelectorAll("nav.tabs a"));
   }
 
   function setYear() {
@@ -89,7 +91,7 @@
     els.title.textContent = "Loading…";
     els.meta.innerHTML = "";
     els.poem.textContent = "Loading poems…";
-    document.title = "My Poetry Space — Loading";
+    document.title = "My Infinite Adore — Loading";
   }
 
   function renderError(message) {
@@ -98,7 +100,7 @@
     els.title.textContent = "Error";
     els.meta.innerHTML = "";
     els.poem.textContent = message;
-    document.title = "My Poetry Space — Error";
+    document.title = "My Infinite Adore — Error";
   }
 
   function renderNotFound() {
@@ -107,7 +109,7 @@
     els.title.textContent = "Not found";
     els.meta.innerHTML = "";
     els.poem.textContent = "This page does not exist yet.";
-    document.title = "My Poetry Space";
+    document.title = "My Infinite Adore";
   }
 
   function escapeHtml(str) {
@@ -161,7 +163,7 @@
       }
     }
 
-    document.title = "My Poetry Space — Intro";
+    document.title = "My Infinite Adore — Intro";
   }
 
   function renderEntry(poem) {
@@ -170,7 +172,7 @@
     els.title.textContent = poem.title || "";
     els.meta.innerHTML = poem.date ? `<span>${poem.date}</span>` : "";
     els.poem.textContent = poem.text || "";
-    document.title = `${poem.title} — My Poetry Space`;
+    document.title = `${poem.title} — My Infinite Adore`;
 
     // Hide quote when not on intro
     if (els.introQuote) {
@@ -289,6 +291,23 @@
     }
   }
 
+  function updateTabsActive() {
+    if (!els.tabs || els.tabs.length === 0) return;
+
+    for (const tab of els.tabs) {
+      const mode = tab.dataset.mode;
+      const isActive = mode === state.mode;
+
+      tab.classList.toggle("active", isActive);
+
+      if (isActive) {
+        tab.setAttribute("aria-current", "page");
+      } else {
+        tab.removeAttribute("aria-current");
+      }
+    }
+  }
+
   // —— Router ————————————————————————————————
 
   function route(rawHash) {
@@ -304,6 +323,7 @@
     if (hash === "#/intro" || hash === "" || hash === "#") {
       state.mode = "intro";
       updateBodyMode();
+      updateTabsActive();
       renderList();
       renderIntro();
       return;
@@ -313,6 +333,7 @@
     if (hash === "#/analyses") {
       state.mode = "analyses";
       updateBodyMode();
+      updateTabsActive();
       renderList();
 
       const newest = state.data.analyses[0];
@@ -322,7 +343,7 @@
         els.title.textContent = "Analyses";
         els.meta.innerHTML = "";
         els.poem.textContent = "No analyses yet.";
-        document.title = "My Poetry Space — Analyses";
+        document.title = "My Infinite Adore — Analyses";
       }
       return;
     }
@@ -331,6 +352,7 @@
     if (hash === "#/originals") {
       state.mode = "originals";
       updateBodyMode();
+      updateTabsActive();
       renderList();
 
       const newest = state.data.originals[0];
@@ -340,7 +362,7 @@
         els.title.textContent = "Originals";
         els.meta.innerHTML = "";
         els.poem.textContent = "No originals yet.";
-        document.title = "My Poetry Space — Originals";
+        document.title = "My Infinite Adore — Originals";
       }
       return;
     }
@@ -350,6 +372,7 @@
     if (match) {
       state.mode = "analyses";
       updateBodyMode();
+      updateTabsActive();
       renderList();
 
       const slug = match[1];
@@ -367,6 +390,7 @@
     if (match) {
       state.mode = "originals";
       updateBodyMode();
+      updateTabsActive();
       renderList();
 
       const slug = match[1];
@@ -382,6 +406,7 @@
     // Fallback
     state.mode = "intro";
     updateBodyMode();
+    updateTabsActive();
     renderNotFound();
   }
 
