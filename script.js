@@ -151,7 +151,7 @@ class PoetryBlog {
                     ${poem.analysis ? `
                         <div class="poem-analysis">
                             <h4 class="analysis-title">Analysis</h4>
-                            <p class="analysis-text">${this.escapeHtml(poem.analysis)}</p>
+                            <div class="analysis-text">${this.formatMarkdown(poem.analysis)}</div>
                         </div>
                     ` : ''}
                 </div>
@@ -211,6 +211,31 @@ class PoetryBlog {
             //     }
             // });
         });
+    }
+
+    formatMarkdown(text) {
+        if (!text) return '';
+        
+        // First escape HTML to prevent XSS
+        let formatted = this.escapeHtml(text);
+        
+        // Convert markdown formatting
+        // Bold text: **text** or __text__
+        formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        formatted = formatted.replace(/__(.*?)__/g, '<strong>$1</strong>');
+        
+        // Italic text: *text* or _text_ (but not if it's part of bold)
+        formatted = formatted.replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, '<em>$1</em>');
+        formatted = formatted.replace(/(?<!_)_([^_\n]+)_(?!_)/g, '<em>$1</em>');
+        
+        // Convert double line breaks to paragraphs
+        const paragraphs = formatted.split('\n\n').filter(p => p.trim());
+        
+        return paragraphs.map(paragraph => {
+            // Trim whitespace and convert single line breaks to <br>
+            const content = paragraph.trim().replace(/\n/g, '<br>');
+            return `<p>${content}</p>`;
+        }).join('');
     }
 
     formatDate(dateString) {
