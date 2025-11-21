@@ -197,6 +197,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .intro-message {
     max-width: none;
+    padding-left: 2rem;
 }
 
 .intro-body-text {
@@ -395,6 +396,10 @@ h1, h2, h3, h4, h5, h6 {
     }
     
     .intro-quote {
+        padding-left: 1.5rem;
+    }
+    
+    .intro-message {
         padding-left: 1.5rem;
     }
     
