@@ -6,6 +6,7 @@
    * - Loads content from poems.json
    * - Handles hash-based routing
    * - Provides search across titles and text
+   * - Hides side panel on intro page and shows a styled quote
    */
 
   const state = {
@@ -107,6 +108,15 @@
     document.title = "My Poetry Space";
   }
 
+  function escapeHtml(str) {
+    return (str || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
   function renderIntro() {
     if (!state.data || !state.data.intro) return;
 
@@ -114,7 +124,28 @@
 
     els.title.textContent = intro.title || "Intro";
     els.meta.innerHTML = "";
-    els.poem.textContent = intro.text || "";
+
+    const quote = escapeHtml(intro.quote || "");
+    const author = escapeHtml(intro.quoteAuthor || "");
+    const body = intro.body || "";
+
+    const bodyParagraphs = body
+      .split(/\n{2,}/)
+      .map((p) => p.trim())
+      .filter(Boolean)
+      .map((p) => `<p>${escapeHtml(p)}</p>`)
+      .join("");
+
+    els.poem.innerHTML = `
+      <section class="intro-quote-card">
+        <div class="intro-quote-text">${quote}</div>
+        <div class="intro-quote-author">— ${author}</div>
+      </section>
+      <section class="intro-body">
+        ${bodyParagraphs}
+      </section>
+    `;
+
     document.title = "My Poetry Space — Intro";
   }
 
@@ -163,7 +194,7 @@
     let items;
 
     if (state.mode === "intro") {
-      // When in intro mode, search across all posts
+      // In intro mode, search across all posts (for now still available when not hidden)
       const analyses = state.data.analyses.map((p) => ({
         ...p,
         __mode: "analyses"
@@ -228,6 +259,15 @@
     }
   }
 
+  function updateBodyMode() {
+    if (!document.body) return;
+    if (state.mode === "intro") {
+      document.body.classList.add("intro-mode");
+    } else {
+      document.body.classList.remove("intro-mode");
+    }
+  }
+
   // —— Router ————————————————————————————————
 
   function route(rawHash) {
@@ -242,6 +282,7 @@
     // Intro root
     if (hash === "#/intro" || hash === "" || hash === "#") {
       state.mode = "intro";
+      updateBodyMode();
       renderList();
       renderIntro();
       return;
@@ -250,6 +291,7 @@
     // Analyses root
     if (hash === "#/analyses") {
       state.mode = "analyses";
+      updateBodyMode();
       renderList();
 
       const newest = state.data.analyses[0];
@@ -267,6 +309,7 @@
     // Originals root
     if (hash === "#/originals") {
       state.mode = "originals";
+      updateBodyMode();
       renderList();
 
       const newest = state.data.originals[0];
@@ -285,6 +328,7 @@
     let match = /^#\/analyses\/(.+)$/.exec(hash);
     if (match) {
       state.mode = "analyses";
+      updateBodyMode();
       renderList();
 
       const slug = match[1];
@@ -301,6 +345,7 @@
     match = /^#\/originals\/(.+)$/.exec(hash);
     if (match) {
       state.mode = "originals";
+      updateBodyMode();
       renderList();
 
       const slug = match[1];
@@ -314,6 +359,8 @@
     }
 
     // Fallback
+    state.mode = "intro";
+    updateBodyMode();
     renderNotFound();
   }
 
