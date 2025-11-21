@@ -1,339 +1,88 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emma's Poetry</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <style>
-      :root {
-        /* Taken from your Tailwind design tokens */
-        --background: hsl(35 40% 97%);
-        --foreground: hsl(25 20% 20%);
-        --card: hsl(35 35% 98%);
-        --card-foreground: hsl(25 20% 20%);
-        --muted: hsl(30 25% 92%);
-        --muted-foreground: hsl(25 15% 45%);
-        --primary: hsl(15 45% 55%);
-        --primary-foreground: hsl(35 40% 97%);
-        --border: hsl(30 20% 88%);
-        --shadow-soft: 0 2px 8px -2px hsl(25 20% 20% / 0.08);
-      }
-
-      * ,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-      }
-
-      body {
-        margin: 0;
-        min-height: 100vh;
-        background: var(--background);
-        color: var(--foreground);
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-          sans-serif;
-      }
-
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6 {
-        font-family: "Georgia", "Times New Roman", serif;
-      }
-
-      .poetry-text {
-        font-family: "Georgia", "Times New Roman", serif;
-        line-height: 1.8;
-      }
-
-      .fade-in {
-        animation: fadeIn 0.6s ease-out;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .container {
-        max-width: 960px;
-        margin: 0 auto;
-        padding: 1.5rem 1.25rem;
-      }
-
-      .site-header {
-        position: sticky;
-        top: 0;
-        z-index: 20;
-        background: var(--background);
-        border-bottom: 1px solid var(--border);
-      }
-
-      .nav-inner {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-      }
-
-      .site-title {
-        font-family: "Georgia", "Times New Roman", serif;
-        font-size: 1.4rem;
-        font-weight: 700;
-        letter-spacing: 0.03em;
-      }
-
-      .nav-links {
-        display: flex;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-      }
-
-      .nav-link {
-        border-radius: 999px;
-        border: none;
-        padding: 0.35rem 0.9rem;
-        background: transparent;
-        color: var(--muted-foreground);
-        font: inherit;
-        cursor: pointer;
-        transition: background 0.2s ease, color 0.2s ease;
-      }
-
-      .nav-link:hover {
-        background: hsla(30, 25%, 88%, 0.6);
-        color: var(--foreground);
-      }
-
-      .nav-link.active {
-        background: hsl(30 25% 88%);
-        color: var(--foreground);
-      }
-
-      @media (max-width: 640px) {
-        .nav-inner {
-          flex-direction: column;
-          align-items: flex-start;
-        }
-      }
-
-      main {
-        min-height: calc(100vh - 110px);
-      }
-
-      .page-section {
-        display: none;
-        padding-bottom: 3rem;
-      }
-
-      .page-section.active {
-        display: block;
-      }
-
-      blockquote {
-        border-left: 4px solid var(--primary);
-        padding-left: 1.5rem;
-        margin: 2.5rem 0 1.5rem;
-      }
-
-      blockquote p {
-        margin: 0 0 0.75rem;
-        font-style: italic;
-        font-size: 1.05rem;
-      }
-
-      blockquote footer {
-        font-size: 0.9rem;
-        color: var(--muted-foreground);
-        font-weight: 500;
-      }
-
-      .intro-text p {
-        margin: 0 0 1rem;
-        line-height: 1.7;
-        color: color-mix(in srgb, var(--foreground) 85%, black 15%);
-      }
-
-      .intro-highlight {
-        color: var(--primary);
-        font-style: italic;
-      }
-
-      .section-title {
-        font-size: clamp(1.9rem, 2.4vw, 2.4rem);
-        margin: 2.2rem 0 0.3rem;
-      }
-
-      .section-subtitle {
-        margin: 0 0 2.5rem;
-        color: var(--muted-foreground);
-      }
-
-      .accordion-list {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-      }
-
-      .accordion-item {
-        border-radius: 0.75rem;
-        border: 1px solid var(--border);
-        background: var(--card);
-        box-shadow: var(--shadow-soft);
-        overflow: hidden;
-      }
-
-      .accordion-header {
-        width: 100%;
-        border: none;
-        padding: 1.05rem 1.5rem;
-        background: transparent;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        cursor: pointer;
-        text-align: left;
-      }
-
-      .accordion-header:hover h3 {
-        color: var(--primary);
-      }
-
-      .accordion-header-text {
-        flex: 1;
-      }
-
-      .accordion-title {
-        margin: 0;
-        font-size: 1.15rem;
-        font-weight: 600;
-      }
-
-      .accordion-meta {
-        margin: 0.25rem 0 0;
-        font-size: 0.9rem;
-        color: var(--muted-foreground);
-      }
-
-      .accordion-icon {
-        margin-left: 1rem;
-        font-size: 1rem;
-        line-height: 1;
-        transition: transform 0.2s ease;
-      }
-
-      .accordion-item.open .accordion-icon {
-        transform: rotate(180deg);
-      }
-
-      .accordion-body {
-        padding: 0 1.5rem 1.5rem;
-        border-top: 1px solid var(--border);
-        display: none;
-        background: transparent;
-      }
-
-      .accordion-item.open .accordion-body {
-        display: block;
-      }
-
-      .poem-text-box {
-        margin-top: 1rem;
-        padding: 1.2rem 1.4rem;
-        border-radius: 0.9rem;
-        background: hsla(30, 25%, 92%, 0.6);
-      }
-
-      .poem-text-box p {
-        margin: 0;
-      }
-
-      .notes-box {
-        margin-top: 1.4rem;
-        padding-left: 1rem;
-        border-left: 2px solid var(--primary);
-      }
-
-      .notes-heading {
-        margin: 0 0 0.45rem;
-        font-size: 0.78rem;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        color: var(--muted-foreground);
-      }
-
-      .notes-box p {
-        margin: 0;
-        line-height: 1.7;
-        font-style: italic;
-        color: color-mix(in srgb, var(--foreground) 85%, black 15%);
-      }
-
-      .site-footer {
-        border-top: 1px solid var(--border);
-        padding: 1.4rem 1.25rem 2rem;
-        text-align: center;
-        font-size: 0.85rem;
-        color: var(--muted-foreground);
-      }
-    </style>
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="container nav-inner">
-        <div class="site-title">Emma's Poetry</div>
-        <nav class="nav-links">
-          <button class="nav-link active" data-section="intro">Intro</button>
-          <button class="nav-link" data-section="analysis">Analysis</button>
-          <button class="nav-link" data-section="originals">Originals</button>
-        </nav>
-      </div>
-    </header>
-
-    <main>
-      <!-- INTRO -->
-      <section id="intro" class="page-section active">
-        <div class="container fade-in">
-          <div id="intro-content"></div>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#intro" class="nav-brand">Emma's Poetry</a>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#intro" class="nav-link" data-tab="intro">Intro</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#analysis" class="nav-link" data-tab="analysis">Analysis</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#originals" class="nav-link active" data-tab="originals">Originals</a>
+                </li>
+            </ul>
         </div>
-      </section>
+    </nav>
 
-      <!-- ANALYSIS -->
-      <section id="analysis" class="page-section">
-        <div class="container fade-in">
-          <h1 class="section-title">Poetry Analysis</h1>
-          <p class="section-subtitle">
-            Exploring the poems I love most, with notes and reflections
-          </p>
-          <div id="analysis-list" class="accordion-list"></div>
-        </div>
-      </section>
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Intro Tab -->
+        <div id="intro" class="tab-content">
+            <div class="container">
+                <div class="intro-content fade-in">
+                    <!-- Quote Section -->
+                    <blockquote class="intro-quote">
+                        <p class="poetry-text quote-text" id="intro-quote-text"></p>
+                        <footer class="quote-author" id="intro-quote-author"></footer>
+                    </blockquote>
 
-      <!-- ORIGINALS -->
-      <section id="originals" class="page-section">
-        <div class="container fade-in">
-          <h1 class="section-title">Original Work</h1>
-          <p class="section-subtitle">My poetry, my voice, my heart</p>
-          <div id="originals-list" class="accordion-list"></div>
+                    <!-- Personal Message -->
+                    <div class="intro-message">
+                        <div id="intro-body" class="intro-body-text"></div>
+                        <p class="poetry-text infinite-adore" id="intro-infinite-adore"></p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </section>
+
+        <!-- Analysis Tab -->
+        <div id="analysis" class="tab-content" style="display: none;">
+            <div class="container">
+                <div class="fade-in">
+                    <h1 class="page-title">Poetry Analysis</h1>
+                    <p class="page-subtitle">Exploring the poems I love most, with notes and reflections</p>
+                    
+                    <div id="analysis-content" class="accordion-container">
+                        <!-- Analysis content will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Originals Tab -->
+        <div id="originals" class="tab-content" style="display: none;">
+            <div class="container">
+                <div class="fade-in">
+                    <h1 class="page-title">Original Work</h1>
+                    <p class="page-subtitle">My poetry, my voice, my heart</p>
+                    
+                    <div id="originals-content" class="accordion-container">
+                        <!-- Originals content will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <footer class="site-footer">
-      All original work © 2025 Emma De Barros. Cannot be reproduced without
-      permission.
+    <!-- Footer -->
+    <footer class="footer">
+        <p>All original work © 2025 Emma De Barros. Cannot be reproduced without permission.</p>
     </footer>
 
     <script src="script.js"></script>
-  </body>
+</body>
 </html>
