@@ -1,407 +1,243 @@
-(() => {
-  "use strict";
-
-  /**
-   * Single-page app controller for the poetry space.
-   * - Loads content from poems.json
-   * - Handles hash-based routing
-   * - Provides search for non-intro sections
-   * - Shows a quote on the intro page
-   */
-
-  const state = {
-    q: "",
-    mode: "intro", // 'intro' | 'analyses' | 'originals'
-    data: null // { intro, analyses, originals }
-  };
-
-  const els = {
-    list: null,
-    input: null,
-    title: null,
-    meta: null,
-    poem: null,
-    year: null,
-    introQuote: null
-  };
-
-  // —— DOM helpers ———————————————————————————
-
-  function cacheDom() {
-    els.list = document.querySelector("#list");
-    els.input = document.querySelector("#q");
-    els.title = document.querySelector("#title");
-    els.meta = document.querySelector("#meta");
-    els.poem = document.querySelector("#poem");
-    els.year = document.querySelector("#year");
-    els.introQuote = document.querySelector("#intro-quote-slot");
-  }
-
-  function setYear() {
-    if (els.year) {
-      els.year.textContent = new Date().getFullYear();
-    }
-  }
-
-  function attachEvents() {
-    if (els.input) {
-      els.input.addEventListener("input", (event) => {
-        state.q = event.target.value || "";
-        renderList();
-      });
+// Poetry Blog JavaScript
+class PoetryBlog {
+    constructor() {
+        this.data = null;
+        this.currentTab = 'intro';
+        this.init();
     }
 
-    window.addEventListener("hashchange", () => {
-      route(window.location.hash);
-    });
-  }
-
-  // —— Data loading ———————————————————————————
-
-  async function loadData() {
-    try {
-      const response = await fetch("poems.json", { cache: "no-cache" });
-
-      if (!response.ok) {
-        throw new Error(`Failed to load poems.json (${response.status})`);
-      }
-
-      const json = await response.json();
-
-      state.data = {
-        intro: json.intro || null,
-        analyses: Array.isArray(json.analyses) ? json.analyses : [],
-        originals: Array.isArray(json.originals) ? json.originals : []
-      };
-    } catch (error) {
-      console.error(error);
-      renderError(
-        "Something went wrong while loading the poems. Please refresh or try again later."
-      );
-    }
-  }
-
-  // —— Rendering helpers —————————————————————————
-
-  function renderLoading() {
-    if (!els.title || !els.poem || !els.meta) return;
-
-    els.title.textContent = "Loading…";
-    els.meta.innerHTML = "";
-    els.poem.textContent = "Loading poems…";
-    document.title = "Emma's Poetry — Loading";
-  }
-
-  function renderError(message) {
-    if (!els.title || !els.poem || !els.meta) return;
-
-    els.title.textContent = "Error";
-    els.meta.innerHTML = "";
-    els.poem.textContent = message;
-    document.title = "Emma's Poetry — Error";
-  }
-
-  function renderNotFound() {
-    if (!els.title || !els.poem || !els.meta) return;
-
-    els.title.textContent = "Not found";
-    els.meta.innerHTML = "";
-    els.poem.textContent = "This page does not exist yet.";
-    document.title = "Emma's Poetry";
-  }
-
-  function escapeHtml(str) {
-    return (str || "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
-  }
-
-  function renderIntro() {
-    if (!state.data || !state.data.intro) return;
-
-    const intro = state.data.intro;
-
-    els.title.textContent = intro.title || "Intro";
-    els.meta.innerHTML = "";
-
-    // Main body text (original “why I’m here” content, without the quote)
-    const body = intro.body || "";
-    const bodyParagraphs = body
-      .split(/\n{2,}/)
-      .map((p) => p.trim())
-      .filter(Boolean)
-      .map((p) => `<p>${escapeHtml(p)}</p>`)
-      .join("");
-
-    els.poem.innerHTML = `
-      <section class="intro-body">
-        ${bodyParagraphs}
-      </section>
-    `;
-
-    // Intro quote block
-    if (els.introQuote) {
-      const quote = intro.quote ? escapeHtml(intro.quote) : "";
-      const author = intro.quoteAuthor ? escapeHtml(intro.quoteAuthor) : "";
-
-      if (quote) {
-        els.introQuote.innerHTML = `
-          <div class="intro-quote-card">
-            <div class="intro-quote-text">${quote}</div>
-            <div class="intro-quote-author">— ${author}</div>
-          </div>
-        `;
-        els.introQuote.hidden = false;
-      } else {
-        els.introQuote.innerHTML = "";
-        els.introQuote.hidden = true;
-      }
+    async init() {
+        try {
+            await this.loadData();
+            this.setupNavigation();
+            this.renderContent();
+            this.setupAccordion();
+            
+            // Show the intro tab by default
+            this.showTab('intro');
+        } catch (error) {
+            console.error('Error initializing blog:', error);
+        }
     }
 
-    document.title = "Emma's Poetry — Intro";
-  }
-
-  function renderEntry(poem) {
-    if (!poem) return;
-
-    els.title.textContent = poem.title || "";
-    els.meta.innerHTML = poem.date ? `<span>${poem.date}</span>` : "";
-    els.poem.textContent = poem.text || "";
-    document.title = `${poem.title} — Emma's Poetry`;
-
-    // Hide quote when not on intro
-    if (els.introQuote) {
-      els.introQuote.hidden = true;
-    }
-  }
-
-  function navigate(hash) {
-    if (window.location.hash === hash) {
-      route(hash);
-      return;
-    }
-    window.location.hash = hash;
-  }
-
-  function matchesQuery(poem) {
-    const q = state.q.trim().toLowerCase();
-    if (!q) return true;
-
-    const haystack = `${poem.title || ""} ${poem.text || ""}`.toLowerCase();
-    return haystack.includes(q);
-  }
-
-  function collectionForMode() {
-    if (!state.data) return [];
-    if (state.mode === "analyses") return state.data.analyses;
-    if (state.mode === "originals") return state.data.originals;
-    return []; // intro does not have its own collection
-  }
-
-  function renderList() {
-    if (!els.list) return;
-
-    // If data not yet loaded, show a simple loading item
-    if (!state.data) {
-      els.list.innerHTML =
-        '<div class="item"><div class="item-title">Loading…</div></div>';
-      return;
+    async loadData() {
+        try {
+            const response = await fetch('poems.json');
+            this.data = await response.json();
+        } catch (error) {
+            console.error('Error loading poems data:', error);
+            // Fallback data if JSON fails to load
+            this.data = {
+                intro: {
+                    title: "Why I'm Here",
+                    quote: "Poetry teaches us to choose every word with devotion and care, and invites us to listen to them with tenderness and awe. In this simple act, we find the purest foundation of love.",
+                    quoteAuthor: "Emma De Barros",
+                    body: "This is my space to express myself as I've fallen in love with poetry.\n\nIt's a form of therapy. It gives me breath while taking my breath away.\nIt's where my love lives. It's where I can be understood. It's where I grow.\n\nMy Infinite Adore, when your heart is ready, you'll know where to find me."
+                },
+                analyses: [],
+                originals: []
+            };
+        }
     }
 
-    let items;
-
-    if (state.mode === "intro") {
-      // Intro: search across all posts (analyses + originals)
-      const analyses = state.data.analyses.map((p) => ({
-        ...p,
-        __mode: "analyses"
-      }));
-      const originals = state.data.originals.map((p) => ({
-        ...p,
-        __mode: "originals"
-      }));
-      items = [...analyses, ...originals]
-        .filter(matchesQuery)
-        .sort((a, b) => {
-          const da = a.date || "";
-          const db = b.date || "";
-          return db.localeCompare(da); // newest first
+    setupNavigation() {
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tab = link.getAttribute('data-tab');
+                this.showTab(tab);
+            });
         });
-    } else {
-      // Normal per-section list
-      items = collectionForMode()
-        .slice()
-        .filter(matchesQuery)
-        .sort((a, b) => {
-          const da = a.date || "";
-          const db = b.date || "";
-          return db.localeCompare(da);
+
+        // Handle browser back/forward
+        window.addEventListener('popstate', (e) => {
+            const tab = e.state?.tab || 'intro';
+            this.showTab(tab, false);
+        });
+
+        // Set initial state
+        const hash = window.location.hash.slice(1) || 'intro';
+        history.replaceState({ tab: hash }, '', `#${hash}`);
+    }
+
+    showTab(tabName, updateHistory = true) {
+        // Hide all tabs
+        const allTabs = document.querySelectorAll('.tab-content');
+        allTabs.forEach(tab => {
+            tab.style.display = 'none';
+        });
+
+        // Show selected tab
+        const selectedTab = document.getElementById(tabName);
+        if (selectedTab) {
+            selectedTab.style.display = 'block';
+        }
+
+        // Update navigation
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('data-tab') === tabName) {
+                link.classList.add('active');
+            }
+        });
+
+        // Update browser history
+        if (updateHistory) {
+            history.pushState({ tab: tabName }, '', `#${tabName}`);
+        }
+
+        this.currentTab = tabName;
+    }
+
+    renderContent() {
+        this.renderIntro();
+        this.renderAnalysis();
+        this.renderOriginals();
+    }
+
+    renderIntro() {
+        if (!this.data.intro) return;
+
+        const quoteTextElement = document.getElementById('intro-quote-text');
+        const quoteAuthorElement = document.getElementById('intro-quote-author');
+        const introBodyElement = document.getElementById('intro-body');
+        const infiniteAdoreElement = document.getElementById('intro-infinite-adore');
+
+        if (quoteTextElement) {
+            quoteTextElement.textContent = `"${this.data.intro.quote}"`;
+        }
+
+        if (quoteAuthorElement) {
+            quoteAuthorElement.textContent = `— ${this.data.intro.quoteAuthor}`;
+        }
+
+        if (introBodyElement && this.data.intro.body) {
+            const bodyParts = this.data.intro.body.split('\n\nMy Infinite Adore, when your heart is ready, you\'ll know where to find me.');
+            const mainBody = bodyParts[0];
+            const infiniteAdorePart = 'My Infinite Adore, when your heart is ready, you\'ll know where to find me.';
+
+            // Convert newlines to paragraphs
+            const paragraphs = mainBody.split('\n\n').map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+            introBodyElement.innerHTML = paragraphs;
+
+            if (infiniteAdoreElement) {
+                infiniteAdoreElement.textContent = infiniteAdorePart;
+            }
+        }
+    }
+
+    renderAnalysis() {
+        const container = document.getElementById('analysis-content');
+        if (!container || !this.data.analyses) return;
+
+        if (this.data.analyses.length === 0) {
+            container.innerHTML = '<p class="text-muted">No analysis pieces available yet.</p>';
+            return;
+        }
+
+        container.innerHTML = this.data.analyses.map((poem, index) => `
+            <div class="accordion-item" data-id="analysis-${index}">
+                <button class="accordion-trigger">
+                    <div class="accordion-header">
+                        <h3 class="accordion-title">${this.escapeHtml(poem.title)}</h3>
+                        <p class="accordion-subtitle">by ${this.escapeHtml(poem.author)}</p>
+                    </div>
+                    <span class="accordion-icon">▼</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="poem-text">${this.escapeHtml(poem.fullText)}</div>
+                    ${poem.analysis ? `
+                        <div class="poem-analysis">
+                            <h4 class="analysis-title">Analysis</h4>
+                            <p class="analysis-text">${this.escapeHtml(poem.analysis)}</p>
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    renderOriginals() {
+        const container = document.getElementById('originals-content');
+        if (!container || !this.data.originals) return;
+
+        if (this.data.originals.length === 0) {
+            container.innerHTML = '<p class="text-muted">No original poems available yet.</p>';
+            return;
+        }
+
+        container.innerHTML = this.data.originals.map((poem, index) => `
+            <div class="accordion-item" data-id="original-${index}">
+                <button class="accordion-trigger">
+                    <div class="accordion-header">
+                        <h3 class="accordion-title">${this.escapeHtml(poem.title)}</h3>
+                        <p class="accordion-subtitle">${this.formatDate(poem.date)}</p>
+                    </div>
+                    <span class="accordion-icon">▼</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="poem-text">${this.escapeHtml(poem.text)}</div>
+                    ${poem.notes ? `
+                        <div class="poem-notes">
+                            <h4 class="notes-title">Notes</h4>
+                            <p class="notes-text">${this.escapeHtml(poem.notes)}</p>
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    setupAccordion() {
+        // Use event delegation for accordion functionality
+        document.addEventListener('click', (e) => {
+            const trigger = e.target.closest('.accordion-trigger');
+            if (!trigger) return;
+
+            e.preventDefault();
+            const accordionItem = trigger.closest('.accordion-item');
+            
+            // Toggle the clicked item
+            accordionItem.classList.toggle('active');
+            
+            // Optional: Close other accordions in the same container
+            // const container = accordionItem.closest('.accordion-container');
+            // const otherItems = container.querySelectorAll('.accordion-item');
+            // otherItems.forEach(item => {
+            //     if (item !== accordionItem) {
+            //         item.classList.remove('active');
+            //     }
+            // });
         });
     }
 
-    els.list.innerHTML = "";
-
-    if (items.length === 0) {
-      els.list.innerHTML =
-        '<div class="item"><div class="item-title">No posts</div><div class="item-meta"></div></div>';
-      return;
+    formatDate(dateString) {
+        try {
+            const date = new Date(dateString);
+            return date.getFullYear().toString();
+        } catch (error) {
+            return dateString;
+        }
     }
 
-    for (const poem of items) {
-      const itemElement = document.createElement("div");
-      itemElement.className = "item";
-      itemElement.role = "listitem";
-
-      const date = poem.date ? poem.date : "";
-
-      itemElement.innerHTML = `
-        <div>
-          <div class="item-title">${poem.title}</div>
-          <div class="item-meta">${date}</div>
-        </div>
-        <div>→</div>
-      `;
-
-      const baseHash = poem.__mode
-        ? `#/${poem.__mode}/`
-        : state.mode === "analyses"
-        ? "#/analyses/"
-        : "#/originals/";
-
-      itemElement.addEventListener("click", () => {
-        navigate(`${baseHash}${poem.slug}`);
-      });
-
-      els.list.appendChild(itemElement);
+    escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
-  }
+}
 
-  function updateBodyMode() {
-    if (!document.body) return;
-    if (state.mode === "intro") {
-      document.body.classList.add("intro-mode");
-    } else {
-      document.body.classList.remove("intro-mode");
+// Initialize the blog when the DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    new PoetryBlog();
+});
+
+// Handle page visibility changes for better performance
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+        // Re-initialize any animations or effects if needed
     }
-  }
-
-  // —— Router ————————————————————————————————
-
-  function route(rawHash) {
-    if (!state.data) {
-      // Data not ready yet; show loading state
-      renderLoading();
-      return;
-    }
-
-    const hash = rawHash || window.location.hash || "#/intro";
-
-    // Intro root
-    if (hash === "#/intro" || hash === "" || hash === "#") {
-      state.mode = "intro";
-      updateBodyMode();
-      renderList();
-      renderIntro();
-      return;
-    }
-
-    // Analyses root
-    if (hash === "#/analyses") {
-      state.mode = "analyses";
-      updateBodyMode();
-      renderList();
-
-      const newest = state.data.analyses[0];
-      if (newest) {
-        renderEntry(newest);
-      } else {
-        els.title.textContent = "Analyses";
-        els.meta.innerHTML = "";
-        els.poem.textContent = "No analyses yet.";
-        document.title = "Emma's Poetry — Analyses";
-      }
-      return;
-    }
-
-    // Originals root
-    if (hash === "#/originals") {
-      state.mode = "originals";
-      updateBodyMode();
-      renderList();
-
-      const newest = state.data.originals[0];
-      if (newest) {
-        renderEntry(newest);
-      } else {
-        els.title.textContent = "Originals";
-        els.meta.innerHTML = "";
-        els.poem.textContent = "No originals yet.";
-        document.title = "Emma's Poetry — Originals";
-      }
-      return;
-    }
-
-    // Specific analysis
-    let match = /^#\/analyses\/(.+)$/.exec(hash);
-    if (match) {
-      state.mode = "analyses";
-      updateBodyMode();
-      renderList();
-
-      const slug = match[1];
-      const poem = state.data.analyses.find((p) => p.slug === slug);
-      if (poem) {
-        renderEntry(poem);
-        return;
-      }
-      renderNotFound();
-      return;
-    }
-
-    // Specific original
-    match = /^#\/originals\/(.+)$/.exec(hash);
-    if (match) {
-      state.mode = "originals";
-      updateBodyMode();
-      renderList();
-
-      const slug = match[1];
-      const poem = state.data.originals.find((p) => p.slug === slug);
-      if (poem) {
-        renderEntry(poem);
-        return;
-      }
-      renderNotFound();
-      return;
-    }
-
-    // Fallback
-    state.mode = "intro";
-    updateBodyMode();
-    renderNotFound();
-  }
-
-  // —— Init ————————————————————————————————
-
-  async function init() {
-    cacheDom();
-    setYear();
-    attachEvents();
-    renderLoading();
-
-    await loadData();
-
-    if (!state.data) {
-      // Error already rendered
-      return;
-    }
-
-    renderList();
-    route(window.location.hash || "#/intro");
-  }
-
-  document.addEventListener("DOMContentLoaded", init);
-})();
+});
