@@ -114,6 +114,15 @@
       margin: 0 auto;
     }
 
+    /* Intro mode: hide side panel and make content full-width */
+    body.intro-mode .grid {
+      grid-template-columns: 1fr;
+    }
+
+    body.intro-mode .panel {
+      display: none;
+    }
+
     @media (max-width: 900px) {
       .grid {
         grid-template-columns: 1fr;
@@ -207,6 +216,66 @@
       padding: 3rem 1rem;
     }
 
+    /* Intro page quote styling */
+    .intro-quote-card {
+      position: relative;
+      padding: 1.75rem 1.75rem 1.5rem;
+      border-radius: 1.25rem;
+      border: 1px solid var(--border);
+      background:
+        radial-gradient(circle at top left, color-mix(in oklab, var(--accent) 14%, transparent) 0, transparent 55%),
+        radial-gradient(circle at bottom right, color-mix(in oklab, var(--accent) 10%, transparent) 0, transparent 55%),
+        var(--bg);
+      margin-bottom: 1.75rem;
+      overflow: hidden;
+    }
+
+    .intro-quote-card::before {
+      content: "“";
+      position: absolute;
+      top: -2.2rem;
+      left: -0.2rem;
+      font-size: 6rem;
+      line-height: 1;
+      opacity: 0.08;
+      pointer-events: none;
+    }
+
+    .intro-quote-text {
+      font-size: clamp(1.05rem, 1.2rem, 1.3rem);
+      line-height: 1.8;
+      letter-spacing: 0.01em;
+    }
+
+    .intro-quote-author {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.17em;
+      color: var(--muted);
+    }
+
+    .intro-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    .intro-body p {
+      margin: 0;
+      color: var(--fg);
+      max-width: 60ch;
+    }
+
+    .intro-body p + p {
+      opacity: 0.92;
+    }
+
+    .intro-body p:last-child {
+      opacity: 0.9;
+    }
+
     /* — Mobile refinements — */
     @media (max-width: 700px) {
       .wrap {
@@ -253,6 +322,10 @@
 
       .item {
         padding: 0.65rem;
+      }
+
+      .intro-quote-card {
+        padding: 1.4rem 1.4rem 1.25rem;
       }
     }
   </style>
