@@ -3,29 +3,28 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My Infinite Adore — Poetry Space</title>
+  <title>Emma's Poetry</title>
   <meta
     name="description"
-    content="My Infinite Adore is my personal poetry space where I share my original poems, reflections, and favourite poems that help me breathe, understand, and grow."
+    content="A personal poetry space where I share my original poems, reflections, and favourite poems that help me breathe, understand, and grow."
   />
+
+  <!-- Fonts to match the vibe of the screenshot -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;600&display=swap"
+    rel="stylesheet"
+  />
+
   <style>
     :root {
-      --bg: #ffffff;
-      --fg: #0f172a;
-      --muted: #475569;
-      --card: #f8fafc;
-      --border: #e2e8f0;
-      --accent: #2563eb;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0b0f1a;
-        --fg: #e5e7eb;
-        --muted: #94a3b8;
-        --card: #0f172a;
-        --border: #1f2937;
-        --accent: #60a5fa;
-      }
+      --bg: #fff7f1;
+      --fg: #3e2d28;
+      --muted: #a48779;
+      --card: #fffaf5;
+      --border: #edd9cd;
+      --accent: #c96a45;
     }
 
     * {
@@ -39,11 +38,12 @@
 
     body {
       margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
-        Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      font-family: "Karla", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
       background: var(--bg);
       color: var(--fg);
-      line-height: 1.6;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
     }
 
     a {
@@ -59,15 +59,14 @@
       position: sticky;
       top: 0;
       z-index: 10;
-      backdrop-filter: saturate(180%) blur(8px);
-      background: color-mix(in oklab, var(--bg) 85%, transparent);
+      background: var(--bg);
       border-bottom: 1px solid var(--border);
     }
 
     .wrap {
-      max-width: 1100px;
+      max-width: 1000px;
       margin: 0 auto;
-      padding: 1rem;
+      padding: 1.1rem 1.25rem;
     }
 
     .brand {
@@ -78,78 +77,94 @@
     }
 
     .brand h1 {
-      font-size: 1.25rem;
-      letter-spacing: 0.02em;
+      font-family: "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.04em;
       margin: 0;
     }
 
     .brand small {
       color: var(--muted);
+      font-size: 0.9rem;
     }
 
     nav.tabs {
       display: flex;
-      gap: 0.5rem;
+      gap: 1.25rem;
       margin-left: auto;
+      font-size: 0.95rem;
     }
 
     nav.tabs a {
-      display: inline-block;
-      padding: 0.45rem 0.75rem;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      color: var(--fg);
-      border-radius: 0.5rem;
-      font-size: 0.9rem;
+      position: relative;
+      padding-bottom: 0.1rem;
+      color: var(--muted);
       white-space: nowrap;
-      transition: background 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out;
     }
 
     nav.tabs a:hover {
-      background: color-mix(in oklab, var(--bg) 92%, var(--card));
-    }
-
-    nav.tabs a.active {
-      border-color: color-mix(in oklab, var(--accent) 70%, var(--border));
-      background: color-mix(in oklab, var(--accent) 12%, var(--bg));
       color: var(--fg);
     }
 
-    nav.tabs a[aria-current="page"] {
-      cursor: default;
+    /* Simple underline for hover/active vibes */
+    nav.tabs a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.1rem;
+      width: 0;
+      height: 1.5px;
+      background: var(--accent);
+      transition: width 0.18s ease-out;
     }
 
-    .grid {
+    nav.tabs a:hover::after {
+      width: 100%;
+    }
+
+    main.grid {
       display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 1.25rem;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 2.25rem;
       align-items: start;
-      padding: 1.25rem;
-      max-width: 1100px;
+      padding: 2.5rem 1.25rem 2.75rem;
+      max-width: 1000px;
       margin: 0 auto;
     }
 
+    /* Intro page: no sidebar, centered content like in the screenshot */
+    body.intro-mode main.grid {
+      grid-template-columns: minmax(0, 1fr);
+      max-width: 780px;
+    }
+
+    body.intro-mode aside.panel {
+      display: none;
+    }
+
     @media (max-width: 900px) {
-      .grid {
+      main.grid {
         grid-template-columns: 1fr;
+        gap: 1.75rem;
+        padding: 1.75rem 1rem 2.25rem;
       }
     }
 
     .panel {
+      border-radius: 1rem;
+      padding: 1rem;
       border: 1px solid var(--border);
       background: var(--card);
-      border-radius: 1rem;
-      padding: 0.75rem;
     }
 
     .search {
       display: flex;
       gap: 0.5rem;
       align-items: center;
-      padding: 0.5rem 0.75rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: 999px;
       border: 1px solid var(--border);
-      border-radius: 0.75rem;
-      background: var(--bg);
+      background: #fffdf9;
     }
 
     .search input {
@@ -158,6 +173,12 @@
       background: transparent;
       color: var(--fg);
       width: 100%;
+      font-family: inherit;
+      font-size: 0.92rem;
+    }
+
+    .search svg {
+      opacity: 0.65;
     }
 
     .list {
@@ -169,243 +190,6 @@
       grid-template-columns: 1fr auto;
       gap: 0.5rem;
       align-items: baseline;
-      padding: 0.75rem;
+      padding: 0.65rem 0.5rem;
       border-radius: 0.75rem;
       cursor: pointer;
-    }
-
-    .item:hover {
-      background: color-mix(in oklab, var(--bg) 90%, var(--card));
-    }
-
-    .item-title {
-      font-weight: 600;
-    }
-
-    .item-meta {
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-
-    article {
-      border: 1px solid var(--border);
-      background: var(--card);
-      border-radius: 1rem;
-      padding: 1.25rem;
-    }
-
-    .poem-title {
-      font-size: clamp(1.3rem, 2.6vw, 2rem);
-      margin: 0 0 0.25rem 0;
-      letter-spacing: 0.01em;
-    }
-
-    .meta {
-      color: var(--muted);
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .poem {
-      font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-      white-space: pre-wrap;
-      letter-spacing: 0.01em;
-      font-size: 1.06rem;
-    }
-
-    footer {
-      text-align: center;
-      color: var(--muted);
-      padding: 3rem 1rem;
-    }
-
-    /* Intro quote in the sidebar spot */
-    #intro-quote-slot {
-      display: none; /* shown only in intro-mode */
-    }
-
-    body.intro-mode .sidebar-main {
-      display: none;
-    }
-
-    body.intro-mode #intro-quote-slot {
-      display: block;
-    }
-
-    .intro-quote-card {
-      position: relative;
-      padding: 1.25rem 1.3rem 1rem;
-      border-radius: 1rem;
-      border: 1px solid var(--border);
-      background:
-        radial-gradient(circle at top left, color-mix(in oklab, var(--accent) 14%, transparent) 0, transparent 55%),
-        radial-gradient(circle at bottom right, color-mix(in oklab, var(--accent) 10%, transparent) 0, transparent 55%),
-        var(--bg);
-      overflow: hidden;
-    }
-
-    .intro-quote-card::before {
-      content: "“";
-      position: absolute;
-      top: -2.1rem;
-      left: -0.2rem;
-      font-size: 4.5rem;
-      line-height: 1;
-      opacity: 0.08;
-      pointer-events: none;
-    }
-
-    .intro-quote-text {
-      font-size: 0.98rem;
-      line-height: 1.7;
-      letter-spacing: 0.01em;
-    }
-
-    .intro-quote-author {
-      margin-top: 0.75rem;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      color: var(--muted);
-    }
-
-    .intro-body {
-      display: flex;
-      flex-direction: column;
-      gap: 0.9rem;
-      margin-top: 0.5rem;
-    }
-
-    .intro-body p {
-      margin: 0;
-      color: var(--fg);
-      max-width: 60ch;
-    }
-
-    .intro-body p + p {
-      opacity: 0.92;
-    }
-
-    .intro-body p:last-child {
-      opacity: 0.9;
-    }
-
-    /* — Mobile refinements — */
-    @media (max-width: 700px) {
-      .wrap {
-        padding: 0.75rem;
-      }
-
-      nav.tabs {
-        width: 100%;
-        order: 3;
-        overflow-x: auto;
-        padding-bottom: 0.25rem;
-        margin-left: 0;
-      }
-
-      nav.tabs a {
-        flex: 0 0 auto;
-      }
-
-      .grid {
-        padding: 0.75rem;
-      }
-
-      .panel,
-      article {
-        padding: 1rem;
-      }
-
-      .poem {
-        font-size: 1rem;
-        line-height: 1.7;
-      }
-
-      .brand h1 {
-        font-size: 1.05rem;
-      }
-
-      .brand small {
-        font-size: 0.9rem;
-      }
-
-      .search {
-        gap: 0.4rem;
-      }
-
-      .item {
-        padding: 0.65rem;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="wrap brand" role="banner">
-      <h1>My Infinite Adore</h1>
-      <small>my poetry space</small>
-      <span style="margin-left: auto"></span>
-      <nav class="tabs" aria-label="Sections">
-        <a href="#/intro" data-mode="intro" title="Introduction">Intro</a>
-        <a href="#/analyses" data-mode="analyses" title="Poem analyses">Analyses</a>
-        <a href="#/originals" data-mode="originals" title="My originals">Originals</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="grid" id="app">
-    <aside class="panel" aria-label="Sidebar">
-      <!-- Intro-only quote lives here -->
-      <div id="intro-quote-slot"></div>
-
-      <!-- Normal sidebar content (hidden on intro) -->
-      <div class="sidebar-main">
-        <div class="search" role="search">
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M21 21l-4.35-4.35m1.6-4.65a6.95 6.95 0 11-13.9 0 6.95 6.95 0 0113.9 0z"
-              stroke="currentColor"
-              stroke-width="1.6"
-              stroke-linecap="round"
-            />
-          </svg>
-          <input
-            id="q"
-            type="search"
-            placeholder="Search… (title or text)"
-            autocomplete="off"
-          />
-        </div>
-        <div class="list" id="list" role="list"></div>
-      </div>
-    </aside>
-
-    <section>
-      <article aria-live="polite" aria-busy="false">
-        <h2 class="poem-title" id="title">Welcome</h2>
-        <div class="meta" id="meta"></div>
-        <div class="poem" id="poem">Loading poems…</div>
-      </article>
-    </section>
-  </main>
-
-  <footer>
-    <span>
-      © <span id="year"></span> · Em De Barros — All poems are my original work.
-      No reproduction without permission.
-    </span>
-  </footer>
-
-  <script src="script.js"></script>
-</body>
-</html>
