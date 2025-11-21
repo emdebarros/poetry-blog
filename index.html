@@ -114,15 +114,6 @@
       margin: 0 auto;
     }
 
-    /* Intro mode: hide side panel and make content full-width */
-    body.intro-mode .grid {
-      grid-template-columns: 1fr;
-    }
-
-    body.intro-mode .panel {
-      display: none;
-    }
-
     @media (max-width: 900px) {
       .grid {
         grid-template-columns: 1fr;
@@ -216,42 +207,53 @@
       padding: 3rem 1rem;
     }
 
-    /* Intro page quote styling */
+    /* Intro quote in the sidebar spot */
+    #intro-quote-slot {
+      display: none; /* shown only in intro-mode */
+    }
+
+    body.intro-mode .sidebar-main {
+      display: none;
+    }
+
+    body.intro-mode #intro-quote-slot {
+      display: block;
+    }
+
     .intro-quote-card {
       position: relative;
-      padding: 1.75rem 1.75rem 1.5rem;
-      border-radius: 1.25rem;
+      padding: 1.25rem 1.3rem 1rem;
+      border-radius: 1rem;
       border: 1px solid var(--border);
       background:
         radial-gradient(circle at top left, color-mix(in oklab, var(--accent) 14%, transparent) 0, transparent 55%),
         radial-gradient(circle at bottom right, color-mix(in oklab, var(--accent) 10%, transparent) 0, transparent 55%),
         var(--bg);
-      margin-bottom: 1.75rem;
       overflow: hidden;
     }
 
     .intro-quote-card::before {
       content: "“";
       position: absolute;
-      top: -2.2rem;
+      top: -2.1rem;
       left: -0.2rem;
-      font-size: 6rem;
+      font-size: 4.5rem;
       line-height: 1;
       opacity: 0.08;
       pointer-events: none;
     }
 
     .intro-quote-text {
-      font-size: clamp(1.05rem, 1.2rem, 1.3rem);
-      line-height: 1.8;
+      font-size: 0.98rem;
+      line-height: 1.7;
       letter-spacing: 0.01em;
     }
 
     .intro-quote-author {
-      margin-top: 1rem;
-      font-size: 0.95rem;
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
       text-transform: uppercase;
-      letter-spacing: 0.17em;
+      letter-spacing: 0.18em;
       color: var(--muted);
     }
 
@@ -323,10 +325,6 @@
       .item {
         padding: 0.65rem;
       }
-
-      .intro-quote-card {
-        padding: 1.4rem 1.4rem 1.25rem;
-      }
     }
   </style>
 </head>
@@ -345,30 +343,36 @@
   </header>
 
   <main class="grid" id="app">
-    <aside class="panel" aria-label="Poem list and search">
-      <div class="search" role="search">
-        <svg
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M21 21l-4.35-4.35m1.6-4.65a6.95 6.95 0 11-13.9 0 6.95 6.95 0 0113.9 0z"
-            stroke="currentColor"
-            stroke-width="1.6"
-            stroke-linecap="round"
+    <aside class="panel" aria-label="Sidebar">
+      <!-- Intro-only quote lives here -->
+      <div id="intro-quote-slot"></div>
+
+      <!-- Normal sidebar content (hidden on intro) -->
+      <div class="sidebar-main">
+        <div class="search" role="search">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M21 21l-4.35-4.35m1.6-4.65a6.95 6.95 0 11-13.9 0 6.95 6.95 0 0113.9 0z"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+            />
+          </svg>
+          <input
+            id="q"
+            type="search"
+            placeholder="Search… (title or text)"
+            autocomplete="off"
           />
-        </svg>
-        <input
-          id="q"
-          type="search"
-          placeholder="Search… (title or text)"
-          autocomplete="off"
-        />
+        </div>
+        <div class="list" id="list" role="list"></div>
       </div>
-      <div class="list" id="list" role="list"></div>
     </aside>
 
     <section>
