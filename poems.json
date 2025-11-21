@@ -3,33 +3,45 @@
     "title": "Why I'm Here",
     "quote": "Poetry teaches us to choose every word with devotion and care, and invites us to listen to them with tenderness and awe. In this simple act, we find the purest foundation of love.",
     "quoteAuthor": "Emma De Barros",
-    "body": "This is my space to express myself as I’ve fallen in love with poetry.\n\nIt’s a form of therapy. It gives me breath while taking my breath away.\nIt’s where my love lives. It’s where I can be understood. It’s where I grow."
+    "body": "This is my space to express myself as I've fallen in love with poetry.\n\nIt's a form of therapy. It gives me breath while taking my breath away.\nIt's where my love lives. It's where I can be understood. It's where I grow.\n\nMy Infinite Adore, when your heart is ready, you'll know where to find me."
   },
-  "analyses": [],
+  "analyses": [
+    {
+      "title": "The Road Not Taken",
+      "author": "Robert Frost",
+      "excerpt": "Two roads diverged in a yellow wood...",
+      "fullText": "Two roads diverged in a yellow wood,\nAnd sorry I could not travel both\nAnd be one traveler, long I stood\nAnd looked down one as far as I could\nTo where it bent in the undergrowth;",
+      "analysis": "This poem explores themes of choice, regret, and the paths we take in life. Frost's imagery of the diverging roads serves as a powerful metaphor for life's decisions and their lasting impact on our journey."
+    }
+  ],
   "originals": [
     {
       "title": "My Infinite Adore",
       "slug": "my-infinite-adore",
       "date": "2025-11-03",
-      "text": "My Infinite Adore\nI lay each stone in silence\na dwelling untouched\nFor when your heart remembers\nour unwritten pages\nThe walls will wake\nto whisper the version of us\ntime was too young to hold"
+      "text": "My Infinite Adore\nI lay each stone in silence\na dwelling untouched\nFor when your heart remembers\nour unwritten pages\nThe walls will wake\nto whisper the version of us\ntime was too young to hold",
+      "notes": ""
     },
     {
       "title": "Rubberband",
       "slug": "rubberband",
       "date": "2025-11-05",
-      "text": "I got this rubberband on my wrist\nand i snap it every time that i think about your lips\nI got this rubberband on my wrist\nalmost break it every time that i’m trying to forget\nI got this rubberband on my wrist\nand i snap it every time to remember you exist\nI got this rubberband on my wrist\nand I break it every time I remember the promise I still haven’t kept yet"
+      "text": "I got this rubberband on my wrist\nand i snap it every time that i think about your lips\nI got this rubberband on my wrist\nalmost break it every time that i'm trying to forget\nI got this rubberband on my wrist\nand i snap it every time to remember you exist\nI got this rubberband on my wrist\nand I break it every time I remember the promise I still haven't kept yet",
+      "notes": ""
     },
     {
       "title": "Through your eyes",
       "slug": "through-your-eyes",
       "date": "2025-11-06",
-      "text": "Do you still see the ghost I used to be?\nOr do I wear his shadow on my skin?\nAm I forever tethered to his memory?\nOr can you see where I begin?\n\nI’ve shed the past like borrowed sin,\ndo you still mistake the ashes for the flame?\nAs I rise, untouched by him,\nwill I be someone you love again?"
+      "text": "Do you still see the ghost I used to be?\nOr do I wear his shadow on my skin?\nAm I forever tethered to his memory?\nOr can you see where I begin?\n\nI've shed the past like borrowed sin,\ndo you still mistake the ashes for the flame?\nAs I rise, untouched by him,\nwill I be someone you love again?",
+      "notes": ""
     },
     {
       "title": "Grilled Cheese",
       "slug": "grilled-cheese",
       "date": "2025-11-19",
-      "text": "I’m Noah, eyes always wet, waiting for the door to open.\nBut the house I’m building isn’t wood or paint.\nIt’s the four walls, the roof, and the door of my heart.\nUntouched by the scars.\n\nAnd the soft breath I’m left with in your absence,\nbarely enough to keep me alive,\nfeeds the light on the front porch.\n\nSo when that knob finally turns,\nyou can sit at the table,\nand I’ll make you a grilled cheese."
+      "text": "I'm Noah, eyes always wet, waiting for the door to open.\nBut the house I'm building isn't wood or paint.\nIt's the four walls, the roof, and the door of my heart.\nUntouched by the scars.\n\nAnd the soft breath I'm left with in your absence,\nbarely enough to keep me alive,\nfeeds the light on the front porch.\n\nSo when that knob finally turns,\nyou can sit at the table,\nand I'll make you a grilled cheese.",
+      "notes": ""
     }
   ]
 }
