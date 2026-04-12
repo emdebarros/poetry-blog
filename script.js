@@ -173,7 +173,7 @@ class PoetryBlog {
                 <button class="accordion-trigger">
                     <div class="accordion-header">
                         <h3 class="accordion-title">${this.escapeHtml(poem.title)}</h3>
-                        <p class="accordion-subtitle">${this.formatDate(poem.date)}</p>
+                        <div class="accordion-subtitle">${this.formatDate(poem.date)}</div>
                     </div>
                     <span class="accordion-icon">▼</span>
                 </button>
@@ -239,12 +239,8 @@ class PoetryBlog {
     }
 
     formatDate(dateString) {
-        try {
-            const date = new Date(dateString);
-            return date.getFullYear().toString();
-        } catch (error) {
-            return dateString;
-        }
+        if (!dateString) return '';
+        return this.formatMarkdown(dateString);
     }
 
     escapeHtml(text) {
